@@ -1,4 +1,4 @@
-
+```html
 <!DOCTYPE html>
 <html lang="ja" class="scroll-smooth">
 <head>
@@ -79,7 +79,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
             <!-- ロゴ -->
             <a href="#" class="flex items-center space-x-3 group">
-                <!-- フラスコは緑で、フラスコの中の液体をオレンジにする -->
+                <!-- フラスコは緑で、フラスコの中の液体をオレンジに変更 -->
                 <div class="relative w-10 h-10 flex items-center justify-center rounded-lg bg-slate-900 border border-slate-700 overflow-hidden group-hover:border-emerald-400 transition-colors duration-300">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 group-hover:animate-bounce">
                         <!-- 緑のフラスコ外枠 -->
@@ -155,22 +155,22 @@
             </div>
         </div>
 
-        <!-- リアルタイム投票・グラフィカルデータ解析ダッシュボード (LocalStorageで安全・確実に即稼働) -->
+        <!-- リアルタイム投票・グラフィカルデータ解析ダッシュボード -->
         <div id="voting-section" class="w-full max-w-4xl mx-auto px-4 relative z-20 mt-8 mb-16">
             <div class="glassmorphism border border-labBorder rounded-3xl p-6 md:p-8 shadow-2xl relative overflow-hidden">
                 <!-- 装飾用背景光彩 -->
                 <div class="absolute -top-24 -left-24 w-48 h-48 bg-emerald-500/10 blur-3xl pointer-events-none rounded-full"></div>
                 <div class="absolute -bottom-24 -right-24 w-48 h-48 bg-orange-500/10 blur-3xl pointer-events-none rounded-full"></div>
 
-                <!-- 投票システム見出し -->
+                <!-- 投票システム見出し: 指示通り「生存予想」と「淘汰vol.1において...」に変更 -->
                 <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-6 mb-6">
                     <div>
                         <div class="flex items-center gap-2 mb-1.5">
                             <span class="w-2 h-2 rounded-full bg-orange-400 animate-pulse"></span>
                             <span class="font-mono text-xs tracking-widest text-orange-400 uppercase">REAL-TIME DATA VISUALIZATION</span>
                         </div>
-                        <h3 class="text-2xl font-bold text-white">生存確率 予想投票</h3>
-                        <p class="text-xs sm:text-sm text-slate-400 mt-1">「淘汰」という企画で生存しているプレイヤーが表示され、一番生存確率が高いプレイヤーへ投票する</p>
+                        <h3 class="text-2xl font-bold text-white">生存予想</h3>
+                        <p class="text-xs sm:text-sm text-slate-400 mt-1">淘汰vol.1において、最も生存確率が高いプレイヤーを予想し投票してください。</p>
                     </div>
                 </div>
 
@@ -268,9 +268,10 @@
     <!-- ロードマップ（今後の実験スケジュール） -->
     <section id="roadmap" class="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-t border-labBorder">
         <div class="text-center max-w-3xl mx-auto mb-16">
+            <!-- 指示通り「今後の予定」と「大喜利実験室で今後予定されている企画です。」に変更 -->
             <span class="font-mono text-xs uppercase tracking-widest text-emerald-400">TIMELINE</span>
-            <h2 class="text-3xl sm:text-4xl font-bold mt-2 text-white">今後の大喜利実験室イベント計画</h2>
-            <p class="text-slate-400 mt-4 text-sm sm:text-base">現在、研究開発＆アイデア練り込み中の企画です。一緒に運営やテストに協力してくれる方を求めています。</p>
+            <h2 class="text-3xl sm:text-4xl font-bold mt-2 text-white">今後の予定</h2>
+            <p class="text-slate-400 mt-4 text-sm sm:text-base">大喜利実験室で今後予定されている企画です。</p>
         </div>
 
         <div class="max-w-4xl mx-auto relative">
@@ -404,7 +405,6 @@
     <footer class="bg-slate-950 border-t border-labBorder py-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
             <div>
-                <!-- コピーライト表示のみ（検証とユーモア...は削除） -->
                 <p class="font-mono text-sm text-slate-400">&copy; 2026 大喜利実験室 (OGIRI LABORATORY). ALL RIGHTS RESERVED.</p>
             </div>
             
@@ -418,7 +418,7 @@
         </div>
     </footer>
 
-    <!-- 全機能稼働用スクリプト -->
+    <!-- 全機能稼働用スクリキスト -->
     <script>
         // Lucideアイコンの初期化
         lucide.createIcons();
@@ -431,7 +431,7 @@
         });
 
         // ----------------------------------------------------
-        // 投票システム（ローカルストレージにより即時稼働）
+        // 投票システム（LocalStorageにより即時稼働）
         // ----------------------------------------------------
         let votesData = {};
         let doughnutChartInstance = null;
@@ -449,19 +449,17 @@
             "りと度", "600番台", "実験体"
         ];
 
-        // 投票データの初期化
+        // 投票データの初期化（以前のローカルデータを完全に引き継ぎます）
         function initVotes() {
             const savedVotes = localStorage.getItem('ogiri_madlab_votes_v2');
             if (savedVotes) {
                 votesData = JSON.parse(savedVotes);
-                // 新しいプレイヤーがリストにいるか確認
                 players.forEach(p => {
                     if (votesData[p] === undefined) {
                         votesData[p] = 0;
                     }
                 });
             } else {
-                // 初回は0から開始（グラフを最初から見せるため、ランダムに少量のデモ票をセットすることも可能ですが、ここでは純粋な0スタートにします）
                 players.forEach(p => {
                     votesData[p] = 0;
                 });
@@ -616,6 +614,7 @@
         const searchInput = document.getElementById('player-search');
         searchInput.addEventListener('input', renderPlayerGrid);
 
+        // 描画関数
         function renderPlayerGrid() {
             const grid = document.getElementById('player-grid');
             const queryText = searchInput.value.trim().toLowerCase();
@@ -778,3 +777,4 @@
 </body>
 </html>
 
+```
