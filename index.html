@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ja" class="scroll-smooth">
 <head>
@@ -78,9 +79,9 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
             <!-- ロゴ -->
             <a href="#" class="flex items-center space-x-3 group">
-                <!-- フラスコは緑で、フラスコの中の液体をオレンジに変更 -->
+                <!-- フラスコは緑で、フラスコの中の液体をオレンジにする -->
                 <div class="relative w-10 h-10 flex items-center justify-center rounded-lg bg-slate-900 border border-slate-700 overflow-hidden group-hover:border-emerald-400 transition-colors duration-300">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linecap="round" class="w-6 h-6 group-hover:animate-bounce">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 group-hover:animate-bounce">
                         <!-- 緑のフラスコ外枠 -->
                         <path d="M10 2v7.586l-4.707 4.707A2 2 0 0 0 5 15.707V19a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3.293a2 2 0 0 0-.586-1.414L14 9.586V2z" stroke="#10b981" />
                         <path d="M10 2h4" stroke="#10b981" />
@@ -146,7 +147,7 @@
                 大喜利実験室では、実験的な長考企画に挑戦しています。参加をお待ちしております。
             </p>
 
-            <!-- ボタン群: 「実験室へ」に変更、クリックすると指定のサイトにジャンプ -->
+            <!-- ボタン群: 「実験室へ」に変更、別サイトにジャンプする設計 -->
             <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
                 <a href="https://oogiri-polis.com/delphi.oogiri/index.php" target="_blank" class="w-full sm:w-auto px-12 py-4 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-black font-bold tracking-wider transition-all duration-300 transform hover:-translate-y-1 shadow-lg shadow-emerald-500/20 text-center flex items-center justify-center gap-2">
                     実験室へ <i data-lucide="external-link" class="w-4 h-4"></i>
@@ -154,7 +155,7 @@
             </div>
         </div>
 
-        <!-- リアルタイム投票・グラフィカルデータ解析ダッシュボード -->
+        <!-- リアルタイム投票・グラフィカルデータ解析ダッシュボード (LocalStorageで安全・確実に即稼働) -->
         <div id="voting-section" class="w-full max-w-4xl mx-auto px-4 relative z-20 mt-8 mb-16">
             <div class="glassmorphism border border-labBorder rounded-3xl p-6 md:p-8 shadow-2xl relative overflow-hidden">
                 <!-- 装飾用背景光彩 -->
@@ -173,7 +174,7 @@
                     </div>
                 </div>
 
-                <!-- グラフエリア (Chart.jsによるリアルタイム視覚化) -->
+                <!-- グラフエリア -->
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-8 bg-slate-950/45 p-4 md:p-6 rounded-2xl border border-slate-800">
                     <!-- ドーナツチャート：得票上位シェア率 -->
                     <div class="lg:col-span-5 flex flex-col items-center justify-center relative min-h-[220px]">
@@ -202,15 +203,13 @@
 
                 <!-- プレイヤーカード表示エリア -->
                 <div id="player-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 max-h-80 overflow-y-auto pr-2 custom-scrollbar">
-                    <div class="col-span-full py-12 text-center text-slate-500 text-xs">
-                        <span class="inline-block animate-spin mr-2">⚙</span>データベース同期中...
-                    </div>
+                    <!-- JSにて即時ローカル構築 -->
                 </div>
 
                 <!-- フッター -->
                 <div class="mt-6 pt-6 border-t border-slate-800 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs font-mono text-slate-400">
                     <span id="total-votes-label">総投票数: -- 票</span>
-                    <span class="flex items-center gap-1"><i data-lucide="lock" class="w-3.5 h-3.5 text-slate-600"></i> 投票結果は瞬時に集計され、グラフに反映されます</span>
+                    <span class="flex items-center gap-1"><i data-lucide="check-circle" class="w-3.5 h-3.5 text-emerald-500"></i> ブラウザ内でリアルタイムに集計・記録されます</span>
                 </div>
             </div>
         </div>
@@ -234,7 +233,7 @@
         <!-- イベントグリッド -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="eventsGrid">
             
-            <!-- 「淘汰」のレポートカードのみを追加 -->
+            <!-- 「淘汰」のレポートカード -->
             <div class="event-card group rounded-2xl glassmorphism overflow-hidden border-slate-800 hover:border-emerald-500/50 transition-all duration-500">
                 <div class="relative h-48 bg-slate-900 flex items-center justify-center overflow-hidden">
                     <div class="absolute inset-0 bg-gradient-to-t from-labDark via-transparent to-transparent z-10"></div>
@@ -419,36 +418,22 @@
         </div>
     </footer>
 
-    <!-- Firebase 統合 & 動的データ連携用スクリプト -->
-    <script type="module">
-        // Firebase ライブラリのインポート
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, updateDoc, collection, onSnapshot, increment } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+    <!-- 全機能稼働用スクリプト -->
+    <script>
+        // Lucideアイコンの初期化
+        lucide.createIcons();
 
-        // 環境設定（初期化に必要な安全用フォールバック設定）
-        const firebaseConfig = typeof __firebase_config !== 'undefined' 
-            ? JSON.parse(__firebase_config) 
-            : {
-                apiKey: "",
-                authDomain: "default-app.firebaseapp.com",
-                projectId: "default-app",
-                storageBucket: "default-app.appspot.com",
-                messagingSenderId: "123456789",
-                appId: "1:123456789:web:1234567"
-              };
+        // モバイルナビゲーションの開閉
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
 
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-
-        // 各サービスの初期化
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-
-        let currentUser = null;
-        let votesData = {}; // プレイヤー名 -> 票数
-
-        // Chart.js のインスタンス保持用
+        // ----------------------------------------------------
+        // 投票システム（ローカルストレージにより即時稼働）
+        // ----------------------------------------------------
+        let votesData = {};
         let doughnutChartInstance = null;
         let barChartInstance = null;
 
@@ -464,93 +449,45 @@
             "りと度", "600番台", "実験体"
         ];
 
-        // 1. セキュリティ認証の実行 (RULE 3 遵守)
-        const initAuth = async () => {
-            try {
-                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                    await signInWithCustomToken(auth, __initial_auth_token);
-                } else {
-                    await signInAnonymously(auth);
-                }
-            } catch (error) {
-                console.error("Auth error:", error);
-            }
-        };
-
-        // ユーザー認証のステート管理
-        onAuthStateChanged(auth, (user) => {
-            currentUser = user;
-            if (user) {
-                // 認証が通ったら即時にリアルタイム受信を開始
-                startListeningVotes();
-            }
-        });
-
-        initAuth();
-
-        // 2. 投票データのリアルタイムリスナー (RULE 1, 2)
-        function startListeningVotes() {
-            if (!currentUser) return;
-
-            // コレクション参照: /artifacts/{appId}/public/data/player_votes
-            const votesCollection = collection(db, 'artifacts', appId, 'public', 'data', 'player_votes');
-
-            onSnapshot(votesCollection, (snapshot) => {
-                const votesMap = {};
-                
-                snapshot.forEach((doc) => {
-                    votesMap[doc.id] = doc.data().count || 0;
-                });
-
-                // 新規プレイヤーの初期補完
-                players.forEach(player => {
-                    if (votesMap[player] === undefined) {
-                        votesMap[player] = 0;
-                        initializePlayerDoc(player);
+        // 投票データの初期化
+        function initVotes() {
+            const savedVotes = localStorage.getItem('ogiri_madlab_votes_v2');
+            if (savedVotes) {
+                votesData = JSON.parse(savedVotes);
+                // 新しいプレイヤーがリストにいるか確認
+                players.forEach(p => {
+                    if (votesData[p] === undefined) {
+                        votesData[p] = 0;
                     }
                 });
-
-                votesData = votesMap;
-                renderPlayerGrid();
-                updateCharts(); // グラフデータの描画更新
-            }, (error) => {
-                console.error("Firestore loading error:", error);
-            });
-        }
-
-        async function initializePlayerDoc(playerName) {
-            try {
-                const playerDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'player_votes', playerName);
-                await setDoc(playerDocRef, { count: 0 }, { merge: true });
-            } catch (err) {
-                console.error("Failed to initialize player: " + playerName, err);
-            }
-        }
-
-        // 3. 予想投票ボタン押下
-        window.voteForPlayer = async function(playerName) {
-            if (!currentUser) {
-                showToast("データベース接続の準備中です...", true);
-                return;
-            }
-
-            try {
-                const playerDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'player_votes', playerName);
-                await updateDoc(playerDocRef, {
-                    count: increment(1)
+            } else {
+                // 初回は0から開始（グラフを最初から見せるため、ランダムに少量のデモ票をセットすることも可能ですが、ここでは純粋な0スタートにします）
+                players.forEach(p => {
+                    votesData[p] = 0;
                 });
-                
-                showToast(`「${playerName}」に予想投票を行いました！`);
-            } catch (error) {
-                console.error("Voting submission error:", error);
-                showToast("投票の送信に失敗しました。再度お試しください。", true);
+                saveVotes();
             }
+            renderPlayerGrid();
+            updateCharts();
+        }
+
+        function saveVotes() {
+            localStorage.setItem('ogiri_madlab_votes_v2', JSON.stringify(votesData));
+        }
+
+        // 投票アクション
+        window.voteForPlayer = function(playerName) {
+            votesData[playerName] = (votesData[playerName] || 0) + 1;
+            saveVotes();
+            renderPlayerGrid();
+            updateCharts();
+            showToast(`「${playerName}」に予想投票を行いました！`);
         };
 
-        // UIフィードバック用通知
-        function showToast(message, isError = false) {
+        // UIフィードバックトースト通知
+        function showToast(message) {
             const toast = document.createElement('div');
-            toast.className = `fixed bottom-8 right-8 px-6 py-4 rounded-2xl glassmorphism border ${isError ? 'border-red-500/50 text-red-400' : 'border-emerald-500/50 text-emerald-400'} text-xs font-semibold z-50 transition-all transform translate-y-10 opacity-0 shadow-2xl`;
+            toast.className = `fixed bottom-8 right-8 px-6 py-4 rounded-2xl glassmorphism border border-emerald-500/50 text-emerald-400 text-xs font-semibold z-50 transition-all transform translate-y-10 opacity-0 shadow-2xl`;
             toast.innerText = message;
             document.body.appendChild(toast);
 
@@ -564,10 +501,9 @@
             }, 3000);
         }
 
-        // 4. Chart.js グラフ初期化 & 更新ロジック
+        // グラフ描画・更新処理 (Chart.js)
         function updateCharts() {
-            // 得票上位ソート
-            const sorted = [...players].map(name => ({
+            const sorted = players.map(name => ({
                 name,
                 votes: votesData[name] || 0
             })).sort((a, b) => b.votes - a.votes);
@@ -575,9 +511,7 @@
             const top5 = sorted.slice(0, 5);
             const top7 = sorted.slice(0, 7);
 
-            // ------------------
-            // A. ドーナツチャート (シェア率)
-            // ------------------
+            // A. ドーナツチャート (得票比率)
             const doughnutLabels = top5.map(p => p.name);
             const doughnutData = top5.map(p => p.votes);
             const doughnutColors = [
@@ -633,9 +567,7 @@
                 });
             }
 
-            // ------------------
             // B. 横棒チャート (ランキング)
-            // ------------------
             const barLabels = top7.map(p => p.name);
             const barData = top7.map(p => p.votes);
 
@@ -659,7 +591,7 @@
                         }]
                     },
                     options: {
-                        indexAxis: 'y', // 横棒グラフにする設定
+                        indexAxis: 'y',
                         responsive: true,
                         maintainAspectRatio: false,
                         scales: {
@@ -680,7 +612,7 @@
             }
         }
 
-        // 5. 検索フィルタとグリッド描画の同期
+        // 検索フィルターとグリッド描画
         const searchInput = document.getElementById('player-search');
         searchInput.addEventListener('input', renderPlayerGrid);
 
@@ -688,7 +620,7 @@
             const grid = document.getElementById('player-grid');
             const queryText = searchInput.value.trim().toLowerCase();
 
-            // 投票順(多い順)にソート
+            // プレイヤー配列を投票順(多い順)に並べ替え
             const sortedPlayers = [...players].sort((a, b) => {
                 const votesA = votesData[a] || 0;
                 const votesB = votesData[b] || 0;
@@ -733,7 +665,13 @@
             lucide.createIcons();
         }
 
-        // Formspree送信
+        // 初期構築のトリガー
+        initVotes();
+
+
+        // ----------------------------------------------------
+        // フォーム送信処理 (Formspree)
+        // ----------------------------------------------------
         window.handleFormSubmit = function(event) {
             event.preventDefault();
             const form = event.target;
@@ -769,7 +707,9 @@
             });
         };
 
-        // 背景粒子アニメーション
+        // ----------------------------------------------------
+        // 背景Canvas粒子アニメーション
+        // ----------------------------------------------------
         const canvas = document.getElementById('labBackground');
         const ctx = canvas.getContext('2d');
         let particles = [];
