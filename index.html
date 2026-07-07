@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ja" class="scroll-smooth">
 <head>
@@ -155,14 +154,14 @@
             </div>
         </div>
 
-        <!-- リアルタイム共有型 予想投票・グラフィカルデータ解析ダッシュボード -->
+        <!-- リアルタイム投票・グラフィカルデータ解析ダッシュボード (Firebaseによる完全同期化) -->
         <div id="voting-section" class="w-full max-w-4xl mx-auto px-4 relative z-20 mt-8 mb-16">
             <div class="glassmorphism border border-labBorder rounded-3xl p-6 md:p-8 shadow-2xl relative overflow-hidden">
                 <!-- 装飾用背景光彩 -->
                 <div class="absolute -top-24 -left-24 w-48 h-48 bg-emerald-500/10 blur-3xl pointer-events-none rounded-full"></div>
                 <div class="absolute -bottom-24 -right-24 w-48 h-48 bg-orange-500/10 blur-3xl pointer-events-none rounded-full"></div>
 
-                <!-- 投票システム見出し: 「生存予想」と「淘汰vol.1において...」に変更 -->
+                <!-- 投票システム見出し: 「生存予想」と「淘汰vol.1において...」 -->
                 <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-6 mb-6">
                     <div>
                         <div class="flex items-center gap-2 mb-1.5">
@@ -171,6 +170,15 @@
                         </div>
                         <h3 class="text-2xl font-bold text-white">生存予想</h3>
                         <p class="text-xs sm:text-sm text-slate-400 mt-1">淘汰vol.1において、最も生存確率が高いプレイヤーを予想し投票してください。</p>
+                    </div>
+                </div>
+
+                <!-- 設定値が入っていない場合の、管理者(sudeshoさん)向け警告アラート (ユーザーには表示されません) -->
+                <div id="config-alert" class="hidden mb-6 bg-red-500/10 border border-red-500/20 rounded-2xl p-4 text-red-400 text-xs flex items-center gap-3">
+                    <i data-lucide="alert-triangle" class="w-5 h-5 flex-shrink-0 animate-bounce"></i>
+                    <div>
+                        <p class="font-bold">【管理者向け警告】Firebaseの設定値（Config）が未入力です。</p>
+                        <p class="text-slate-400 mt-0.5">右側パネルの「Firebase設定ガイド」を参考に、コードの下部（410行目付近）にご自身のFirebase情報を貼り付けてコミットしてください。</p>
                     </div>
                 </div>
 
@@ -203,13 +211,13 @@
 
                 <!-- プレイヤーカード表示エリア -->
                 <div id="player-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 max-h-80 overflow-y-auto pr-2 custom-scrollbar">
-                    <!-- JSにて同期ロード -->
+                    <!-- JSにて即時ローカル構築 -->
                 </div>
 
                 <!-- フッター -->
                 <div class="mt-6 pt-6 border-t border-slate-800 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs font-mono text-slate-400">
                     <span id="total-votes-label">総投票数: -- 票</span>
-                    <span class="flex items-center gap-1"><i data-lucide="globe" class="w-3.5 h-3.5 text-emerald-500"></i> 全アクセス者の投票結果がリアルタイムに集計・同期されています</span>
+                    <span class="flex items-center gap-1"><i data-lucide="cloud-lightning" class="w-3.5 h-3.5 text-emerald-500"></i> Firebase経由で全世界にリアルタイム同期されています</span>
                 </div>
             </div>
         </div>
@@ -268,7 +276,6 @@
     <!-- ロードマップ（今後の実験スケジュール） -->
     <section id="roadmap" class="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-t border-labBorder">
         <div class="text-center max-w-3xl mx-auto mb-16">
-            <!-- 「今後の予定」と「大喜利実験室で今後予定されている企画です。」に変更 -->
             <span class="font-mono text-xs uppercase tracking-widest text-emerald-400">TIMELINE</span>
             <h2 class="text-3xl sm:text-4xl font-bold mt-2 text-white">今後の予定</h2>
             <p class="text-slate-400 mt-4 text-sm sm:text-base">大喜利実験室で今後予定されている企画です。</p>
@@ -418,29 +425,29 @@
         </div>
     </footer>
 
-    <!-- 全機能稼働用スクリプト -->
-    <script>
-        // Lucideアイコンの初期化
-        lucide.createIcons();
+    <!-- Firebase SDKの読み込み & 完全同期処理用スクリプト -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, updateDoc, collection, onSnapshot, increment } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // モバイルナビゲーションの開閉
-        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-        const mobileMenu = document.getElementById('mobileMenu');
-        mobileMenuBtn.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
-        });
+        // ====================================================
+        // 【追加設定エリア】ここにFirebaseの設定情報を貼り付けてください！
+        // ====================================================
+        const MY_FIREBASE_CONFIG = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_AUTH_DOMAIN",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_STORAGE_BUCKET",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+        // ====================================================
 
-        // ----------------------------------------------------
-        // 投票システム（オープンKey-Value APIによるグローバル共有）
-        // ----------------------------------------------------
-        
-        // sudeshoさん専用の超高解像度・一意のパブリックバケットパス
-        const DB_URL = "https://kvdb.io/OogiriMadLab_sudesho_v3/votes";
         let votesData = {};
         let doughnutChartInstance = null;
         let barChartInstance = null;
 
-        // 38名のプレイヤーリスト
         const players = [
             "安藤龍", "絵描き歌", "お城", "オホ", "kak",
             "神谷テクニカ", "クルペッコの手羽元", "さいぞう", "sAwArA", "三十六度倶楽部",
@@ -452,126 +459,145 @@
             "りと度", "600番台", "実験体"
         ];
 
-        // 投票データの初期化・グローバル同期の確立
-        async function initVotes() {
-            // 一番最初にローカルストレージから暫定ロード（超高速表示のため）
-            loadFromLocalStorage();
-            renderPlayerGrid();
-            updateCharts();
-
-            // サーバーから最新の全員の共有投票結果を取得
-            await syncWithGlobalDB();
+        // 設定の検証（YOUR_API_KEYのまま、あるいは空の場合の警告表示）
+        if (!MY_FIREBASE_CONFIG.apiKey || MY_FIREBASE_CONFIG.apiKey.includes("YOUR_")) {
+            document.getElementById('config-alert').classList.remove('hidden');
+            // 設定が入るまでの間、暫定的にローカルストレージで動作させておく
+            setupLocalFallback();
+        } else {
+            // Firebaseが入力されている場合は、完全なリアルタイム同期を開始
+            setupFirebase();
         }
 
-        // 共有データベースからの同期処理
-        async function syncWithGlobalDB() {
+        // --- Firebaseによる完全同期処理 ---
+        async function setupFirebase() {
             try {
-                const response = await fetch(DB_URL);
-                if (response.ok) {
-                    const globalData = await response.json();
-                    
-                    // サーバーから取得したデータで差分をマージ（常に値の大きい方を採用し破損を防ぐ）
-                    players.forEach(p => {
-                        votesData[p] = Math.max(votesData[p] || 0, globalData[p] || 0);
+                const app = initializeApp(MY_FIREBASE_CONFIG);
+                const auth = getAuth(app);
+                const db = getFirestore(app);
+
+                // 安全な認証処理（RULE 3 遵守）
+                await signInAnonymously(auth);
+
+                // コレクション指定 (RULE 1 遵守: /artifacts/{appId}/public/data/player_votes)
+                const appId = "ogiri_madlab"; 
+                const votesCollection = collection(db, 'artifacts', appId, 'public', 'data', 'player_votes');
+
+                // データベースからリアルタイム受信
+                onSnapshot(votesCollection, (snapshot) => {
+                    const votesMap = {};
+                    snapshot.forEach((doc) => {
+                        votesMap[doc.id] = doc.data().count || 0;
                     });
-                    
-                    saveToLocalStorage();
+
+                    // 未設定のプレイヤーをマージ
+                    players.forEach(p => {
+                        if (votesMap[p] === undefined) {
+                            votesMap[p] = 0;
+                            // データベース側にも初期ドキュメントを安全に作成
+                            const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'player_votes', p);
+                            setDoc(docRef, { count: 0 }, { merge: true });
+                        }
+                    });
+
+                    votesData = votesMap;
                     renderPlayerGrid();
                     updateCharts();
-                } else if (response.status === 404) {
-                    // データベースにまだファイルがない場合は初期構造を生成してアップロード
-                    await uploadData(votesData);
-                }
-            } catch (error) {
-                console.warn("Global DB sync is offline. Operating in local mode:", error);
-            }
-        }
-
-        // データベースに直接上書き
-        async function uploadData(data) {
-            try {
-                await fetch(DB_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data)
+                }, (error) => {
+                    console.error("Firestore loading failed:", error);
+                    setupLocalFallback();
                 });
-            } catch (e) {
-                console.error("Failed to push to global DB:", e);
+
+                // グローバル投票関数のバインド
+                window.voteForPlayer = async function(playerName) {
+                    try {
+                        const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'player_votes', playerName);
+                        await updateDoc(docRef, {
+                            count: increment(1)
+                        });
+                        showToast(`「${playerName}」に予想投票を行いました！`);
+                    } catch (e) {
+                        console.error("Failed to submit vote:", e);
+                        showToast("投票の送信に失敗しました。再度お試しください。", true);
+                    }
+                };
+
+            } catch (err) {
+                console.error("Firebase init failed, switching to local mode:", err);
+                setupLocalFallback();
             }
         }
 
-        function loadFromLocalStorage() {
-            const savedVotes = localStorage.getItem('ogiri_madlab_votes_v2');
+        // --- ローカル環境フォールバック（設定前テスト用） ---
+        function setupLocalFallback() {
+            const savedVotes = localStorage.getItem('ogiri_madlab_votes_v3');
             if (savedVotes) {
                 votesData = JSON.parse(savedVotes);
             }
-            // 不足しているプレイヤーを0票で初期構築
             players.forEach(p => {
-                if (votesData[p] === undefined) {
-                    votesData[p] = 0;
-                }
+                if (votesData[p] === undefined) votesData[p] = 0;
             });
-        }
-
-        function saveToLocalStorage() {
-            localStorage.setItem('ogiri_madlab_votes_v2', JSON.stringify(votesData));
-        }
-
-        // 投票アクション（瞬時にローカルに反映し、バックグラウンドでクラウドへ同期）
-        window.voteForPlayer = async function(playerName) {
-            // 1. まずローカルの画面を即時に「+1」増やす（サクサク感を維持）
-            votesData[playerName] = (votesData[playerName] || 0) + 1;
-            saveToLocalStorage();
             renderPlayerGrid();
             updateCharts();
-            showToast(`「${playerName}」に生存予想を投票しました！(データベース同期中)`);
 
-            // 2. クラウド側の他の人の票も巻き込んでマージ＆送信
-            try {
-                const response = await fetch(DB_URL);
-                let currentGlobal = {};
-                if (response.ok) {
-                    currentGlobal = await response.json();
-                }
-
-                // クラウド側の数値をベースに自分の最新票「+1」を乗せて再アップロード
-                players.forEach(p => {
-                    votesData[p] = Math.max(votesData[p] || 0, currentGlobal[p] || 0);
-                });
-                votesData[playerName] = (currentGlobal[playerName] || 0) + 1;
-
-                await uploadData(votesData);
-                saveToLocalStorage();
+            window.voteForPlayer = function(playerName) {
+                votesData[playerName] = (votesData[playerName] || 0) + 1;
+                localStorage.setItem('ogiri_madlab_votes_v3', JSON.stringify(votesData));
                 renderPlayerGrid();
                 updateCharts();
-            } catch (error) {
-                console.warn("Unable to sync vote with server, saved locally:", error);
-            }
-        };
-
-        // バックグラウンドで定期的に全員の投票数を同期（15秒に1回自動受信）
-        setInterval(async () => {
-            await syncWithGlobalDB();
-        }, 15000);
-
-        // UIフィードバックトースト通知
-        function showToast(message) {
-            const toast = document.createElement('div');
-            toast.className = `fixed bottom-8 right-8 px-6 py-4 rounded-2xl glassmorphism border border-emerald-500/50 text-emerald-400 text-xs font-semibold z-50 transition-all transform translate-y-10 opacity-0 shadow-2xl`;
-            toast.innerText = message;
-            document.body.appendChild(toast);
-
-            setTimeout(() => {
-                toast.classList.remove('translate-y-10', 'opacity-0');
-            }, 100);
-
-            setTimeout(() => {
-                toast.classList.add('translate-y-10', 'opacity-0');
-                setTimeout(() => { toast.remove(); }, 300);
-            }, 3000);
+                showToast(`「${playerName}」に仮投票しました（ローカル動作）`);
+            };
         }
 
-        // グラフ描画・更新処理 (Chart.js)
+        // --- 画面表示処理 & 検索機能 ---
+        const searchInput = document.getElementById('player-search');
+        searchInput.addEventListener('input', renderPlayerGrid);
+
+        function renderPlayerGrid() {
+            const grid = document.getElementById('player-grid');
+            const queryText = searchInput.value.trim().toLowerCase();
+
+            const sortedPlayers = [...players].sort((a, b) => {
+                const votesA = votesData[a] || 0;
+                const votesB = votesData[b] || 0;
+                if (votesB !== votesA) return votesB - votesA;
+                return a.localeCompare(b, 'ja');
+            });
+
+            const filteredPlayers = sortedPlayers.filter(player => player.toLowerCase().includes(queryText));
+            grid.innerHTML = '';
+
+            if (filteredPlayers.length === 0) {
+                grid.innerHTML = `<div class="col-span-full py-12 text-center text-slate-500 text-xs">「${queryText}」に該当するプレイヤーは見つかりませんでした。</div>`;
+                return;
+            }
+
+            const maxVotes = Math.max(...Object.values(votesData), 1);
+            const totalVotes = Object.values(votesData).reduce((sum, v) => sum + v, 0);
+            document.getElementById('total-votes-label').innerText = `総投票数: ${totalVotes} 票`;
+
+            filteredPlayers.forEach(player => {
+                const votes = votesData[player] || 0;
+                const ratioPercent = Math.round((votes / maxVotes) * 100);
+
+                const card = document.createElement('div');
+                card.className = "p-3 rounded-xl bg-slate-950/80 border border-slate-800 hover:border-orange-500/40 transition-all flex flex-col justify-between gap-3 relative overflow-hidden group";
+                card.innerHTML = `
+                    <div class="absolute bottom-0 left-0 h-[2px] bg-gradient-to-r from-emerald-500 to-orange-500 transition-all duration-700" style="width: ${ratioPercent}%"></div>
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs font-bold text-slate-200 truncate pr-1" title="${player}">${player}</span>
+                        <span class="text-[10px] font-mono text-orange-400 font-semibold">${votes} 票</span>
+                    </div>
+                    <button onclick="voteForPlayer('${player}')" class="w-full py-2 rounded bg-slate-900 hover:bg-orange-500 hover:text-black border border-slate-800 hover:border-transparent transition-all text-[10px] font-bold tracking-wider flex items-center justify-center gap-1.5">
+                        <i data-lucide="thumbs-up" class="w-3.5 h-3.5"></i>投票
+                    </button>
+                `;
+                grid.appendChild(card);
+            });
+            lucide.createIcons();
+        }
+
+        // --- グラフ表示処理 ---
         function updateCharts() {
             const sorted = players.map(name => ({
                 name,
@@ -581,16 +607,9 @@
             const top5 = sorted.slice(0, 5);
             const top7 = sorted.slice(0, 7);
 
-            // A. ドーナツチャート (得票比率)
             const doughnutLabels = top5.map(p => p.name);
             const doughnutData = top5.map(p => p.votes);
-            const doughnutColors = [
-                'rgba(249, 115, 22, 0.85)',  // オレンジ
-                'rgba(16, 185, 129, 0.8)',  // エメラルド
-                'rgba(6, 182, 212, 0.75)',  // シアン
-                'rgba(168, 85, 247, 0.7)',  // パープル
-                'rgba(239, 68, 68, 0.65)'   // レッド
-            ];
+            const doughnutColors = ['rgba(249, 115, 22, 0.85)', 'rgba(16, 185, 129, 0.8)', 'rgba(6, 182, 212, 0.75)', 'rgba(168, 85, 247, 0.7)', 'rgba(239, 68, 68, 0.65)'];
 
             const ctxDoughnut = document.getElementById('votesDoughnutChart').getContext('2d');
             if (doughnutChartInstance) {
@@ -616,31 +635,15 @@
                             legend: {
                                 display: true,
                                 position: 'bottom',
-                                labels: {
-                                    color: '#94a3b8',
-                                    font: { size: 10, family: 'Noto Sans JP' },
-                                    boxWidth: 10
-                                }
-                            },
-                            tooltip: {
-                                callbacks: {
-                                    label: function(context) {
-                                        const value = context.raw;
-                                        const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                                        const pct = total > 0 ? Math.round((value / total) * 100) : 0;
-                                        return ` ${context.label}: ${value}票 (${pct}%)`;
-                                    }
-                                }
+                                labels: { color: '#94a3b8', font: { size: 10 }, boxWidth: 10 }
                             }
                         }
                     }
                 });
             }
 
-            // B. 横棒チャート (ランキング)
             const barLabels = top7.map(p => p.name);
             const barData = top7.map(p => p.votes);
-
             const ctxBar = document.getElementById('votesBarChart').getContext('2d');
             if (barChartInstance) {
                 barChartInstance.data.labels = barLabels;
@@ -655,9 +658,7 @@
                             label: '得票数',
                             data: barData,
                             backgroundColor: 'rgba(249, 115, 22, 0.8)',
-                            hoverBackgroundColor: 'rgba(249, 115, 22, 1)',
-                            borderRadius: 4,
-                            borderWidth: 0
+                            borderRadius: 4
                         }]
                     },
                     options: {
@@ -665,122 +666,31 @@
                         responsive: true,
                         maintainAspectRatio: false,
                         scales: {
-                            x: {
-                                grid: { color: 'rgba(255, 255, 255, 0.04)' },
-                                ticks: { color: '#64748b', font: { size: 10 } }
-                            },
-                            y: {
-                                grid: { display: false },
-                                ticks: { color: '#e2e8f0', font: { size: 11, family: 'Noto Sans JP' } }
-                            }
+                            x: { grid: { color: 'rgba(255, 255, 255, 0.04)' }, ticks: { color: '#64748b', font: { size: 10 } } },
+                            y: { grid: { display: false }, ticks: { color: '#e2e8f0', font: { size: 11 } } }
                         },
-                        plugins: {
-                            legend: { display: false }
-                        }
+                        plugins: { legend: { display: false } }
                     }
                 });
             }
         }
 
-        // 検索フィルターとグリッド描画
-        const searchInput = document.getElementById('player-search');
-        searchInput.addEventListener('input', renderPlayerGrid);
-
-        // 描画関数
-        function renderPlayerGrid() {
-            const grid = document.getElementById('player-grid');
-            const queryText = searchInput.value.trim().toLowerCase();
-
-            // プレイヤー配列を投票順(多い順)に並べ替え
-            const sortedPlayers = [...players].sort((a, b) => {
-                const votesA = votesData[a] || 0;
-                const votesB = votesData[b] || 0;
-                if (votesB !== votesA) { return votesB - votesA; }
-                return a.localeCompare(b, 'ja');
-            });
-
-            const filteredPlayers = sortedPlayers.filter(player => player.toLowerCase().includes(queryText));
-
-            grid.innerHTML = '';
-
-            if (filteredPlayers.length === 0) {
-                grid.innerHTML = `<div class="col-span-full py-12 text-center text-slate-500 text-xs">「${queryText}」に該当するプレイヤーは見つかりませんでした。</div>`;
-                return;
-            }
-
-            const maxVotes = Math.max(...Object.values(votesData), 1);
-            const totalVotes = Object.values(votesData).reduce((sum, v) => sum + v, 0);
-            
-            document.getElementById('total-votes-label').innerText = `総投票数: ${totalVotes} 票`;
-
-            filteredPlayers.forEach(player => {
-                const votes = votesData[player] || 0;
-                const ratioPercent = Math.round((votes / maxVotes) * 100);
-
-                const card = document.createElement('div');
-                card.className = "p-3 rounded-xl bg-slate-950/80 border border-slate-800 hover:border-orange-500/40 transition-all flex flex-col justify-between gap-3 relative overflow-hidden group";
-                
-                card.innerHTML = `
-                    <div class="absolute bottom-0 left-0 h-[2px] bg-gradient-to-r from-emerald-500 to-orange-500 transition-all duration-700" style="width: ${ratioPercent}%"></div>
-                    <div class="flex justify-between items-start">
-                        <span class="text-xs font-bold text-slate-200 truncate pr-1" title="${player}">${player}</span>
-                        <span class="text-[10px] font-mono text-orange-400 font-semibold">${votes} 票</span>
-                    </div>
-                    <button onclick="voteForPlayer('${player}')" class="w-full py-2 rounded bg-slate-900 hover:bg-orange-500 hover:text-black border border-slate-800 hover:border-transparent transition-all text-[10px] font-bold tracking-wider flex items-center justify-center gap-1.5">
-                        <i data-lucide="thumbs-up" class="w-3.5 h-3.5"></i>投票
-                    </button>
-                `;
-                grid.appendChild(card);
-            });
-
-            lucide.createIcons();
+        // トースト通知
+        function showToast(message, isError = false) {
+            const toast = document.createElement('div');
+            toast.className = `fixed bottom-8 right-8 px-6 py-4 rounded-2xl glassmorphism border ${isError ? 'border-red-500/50 text-red-400' : 'border-emerald-500/50 text-emerald-400'} text-xs font-semibold z-50 transition-all transform translate-y-10 opacity-0 shadow-2xl`;
+            toast.innerText = message;
+            document.body.appendChild(toast);
+            setTimeout(() => { toast.classList.remove('translate-y-10', 'opacity-0'); }, 100);
+            setTimeout(() => {
+                toast.classList.add('translate-y-10', 'opacity-0');
+                setTimeout(() => { toast.remove(); }, 300);
+            }, 3000);
         }
+    </script>
 
-        // 初期構築のトリガー
-        initVotes();
-
-
-        // ----------------------------------------------------
-        // フォーム送信処理 (Formspree)
-        // ----------------------------------------------------
-        window.handleFormSubmit = function(event) {
-            event.preventDefault();
-            const form = event.target;
-            const actionUrl = form.getAttribute('action');
-
-            if (actionUrl.includes('YOUR_FORM_ID')) {
-                form.classList.add('hidden');
-                document.getElementById('formSuccessMsg').classList.remove('hidden');
-                return;
-            }
-
-            const data = new FormData(form);
-            fetch(actionUrl, {
-                method: 'POST',
-                body: data,
-                headers: { 'Accept': 'application/json' }
-            }).then(response => {
-                if (response.ok) {
-                    form.classList.add('hidden');
-                    document.getElementById('formSuccessMsg').classList.remove('hidden');
-                    form.reset();
-                } else {
-                    response.json().then(data => {
-                        if (Object.hasOwn(data, 'errors')) {
-                            alert(data["errors"].map(error => error["message"]).join(", "));
-                        } else {
-                            alert("送信時にエラーが発生しました。");
-                        }
-                    })
-                }
-            }).catch(error => {
-                alert("送信中にネットワークエラーが発生しました。");
-            });
-        };
-
-        // ----------------------------------------------------
-        // 背景Canvas粒子アニメーション
-        // ----------------------------------------------------
+    <!-- 共有背景粒子アニメーション -->
+    <script>
         const canvas = document.getElementById('labBackground');
         const ctx = canvas.getContext('2d');
         let particles = [];
@@ -848,4 +758,3 @@
     </script>
 </body>
 </html>
-
