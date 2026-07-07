@@ -1,4 +1,4 @@
-```html
+
 <!DOCTYPE html>
 <html lang="ja" class="scroll-smooth">
 <head>
@@ -79,7 +79,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
             <!-- ロゴ -->
             <a href="#" class="flex items-center space-x-3 group">
-                <!-- フラスコは緑で、フラスコの中の液体をオレンジに変更 -->
+                <!-- フラスコは緑で、フラスコの中の液体をオレンジにする -->
                 <div class="relative w-10 h-10 flex items-center justify-center rounded-lg bg-slate-900 border border-slate-700 overflow-hidden group-hover:border-emerald-400 transition-colors duration-300">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 group-hover:animate-bounce">
                         <!-- 緑のフラスコ外枠 -->
@@ -155,14 +155,14 @@
             </div>
         </div>
 
-        <!-- リアルタイム投票・グラフィカルデータ解析ダッシュボード -->
+        <!-- リアルタイム共有型 予想投票・グラフィカルデータ解析ダッシュボード -->
         <div id="voting-section" class="w-full max-w-4xl mx-auto px-4 relative z-20 mt-8 mb-16">
             <div class="glassmorphism border border-labBorder rounded-3xl p-6 md:p-8 shadow-2xl relative overflow-hidden">
                 <!-- 装飾用背景光彩 -->
                 <div class="absolute -top-24 -left-24 w-48 h-48 bg-emerald-500/10 blur-3xl pointer-events-none rounded-full"></div>
                 <div class="absolute -bottom-24 -right-24 w-48 h-48 bg-orange-500/10 blur-3xl pointer-events-none rounded-full"></div>
 
-                <!-- 投票システム見出し: 指示通り「生存予想」と「淘汰vol.1において...」に変更 -->
+                <!-- 投票システム見出し: 「生存予想」と「淘汰vol.1において...」に変更 -->
                 <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-6 mb-6">
                     <div>
                         <div class="flex items-center gap-2 mb-1.5">
@@ -203,13 +203,13 @@
 
                 <!-- プレイヤーカード表示エリア -->
                 <div id="player-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 max-h-80 overflow-y-auto pr-2 custom-scrollbar">
-                    <!-- JSにて即時ローカル構築 -->
+                    <!-- JSにて同期ロード -->
                 </div>
 
                 <!-- フッター -->
                 <div class="mt-6 pt-6 border-t border-slate-800 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs font-mono text-slate-400">
                     <span id="total-votes-label">総投票数: -- 票</span>
-                    <span class="flex items-center gap-1"><i data-lucide="check-circle" class="w-3.5 h-3.5 text-emerald-500"></i> ブラウザ内でリアルタイムに集計・記録されます</span>
+                    <span class="flex items-center gap-1"><i data-lucide="globe" class="w-3.5 h-3.5 text-emerald-500"></i> 全アクセス者の投票結果がリアルタイムに集計・同期されています</span>
                 </div>
             </div>
         </div>
@@ -268,7 +268,7 @@
     <!-- ロードマップ（今後の実験スケジュール） -->
     <section id="roadmap" class="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-t border-labBorder">
         <div class="text-center max-w-3xl mx-auto mb-16">
-            <!-- 指示通り「今後の予定」と「大喜利実験室で今後予定されている企画です。」に変更 -->
+            <!-- 「今後の予定」と「大喜利実験室で今後予定されている企画です。」に変更 -->
             <span class="font-mono text-xs uppercase tracking-widest text-emerald-400">TIMELINE</span>
             <h2 class="text-3xl sm:text-4xl font-bold mt-2 text-white">今後の予定</h2>
             <p class="text-slate-400 mt-4 text-sm sm:text-base">大喜利実験室で今後予定されている企画です。</p>
@@ -278,7 +278,7 @@
             <!-- タイムライン縦ライン -->
             <div class="absolute left-4 md:left-1/2 transform md:-translate-x-1/2 top-0 bottom-0 w-[2px] bg-slate-800"></div>
 
-            <!-- ステップ 1 (すべて「未定」に記載) -->
+            <!-- ステップ 1 -->
             <div class="relative flex flex-col md:flex-row items-start md:items-center mb-16">
                 <div class="absolute left-4 md:left-1/2 transform -translate-x-1/2 w-8 h-8 rounded-full bg-slate-900 border-2 border-emerald-500 flex items-center justify-center z-10 shadow-lg shadow-emerald-500/20">
                     <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
@@ -293,7 +293,7 @@
                 <div class="hidden md:block w-1/2"></div>
             </div>
 
-            <!-- ステップ 2 (すべて「未定」に記載) -->
+            <!-- ステップ 2 -->
             <div class="relative flex flex-col md:flex-row items-start md:items-center mb-16">
                 <div class="absolute left-4 md:left-1/2 transform -translate-x-1/2 w-8 h-8 rounded-full bg-slate-900 border-2 border-cyan-500 flex items-center justify-center z-10 shadow-lg shadow-cyan-500/20">
                     <span class="w-2.5 h-2.5 rounded-full bg-cyan-400"></span>
@@ -308,7 +308,7 @@
                 </div>
             </div>
 
-            <!-- ステップ 3 (すべて「未定」に記載) -->
+            <!-- ステップ 3 -->
             <div class="relative flex flex-col md:flex-row items-start md:items-center">
                 <div class="absolute left-4 md:left-1/2 transform -translate-x-1/2 w-8 h-8 rounded-full bg-slate-900 border-2 border-purple-500 flex items-center justify-center z-10 shadow-lg shadow-purple-500/20">
                     <span class="w-2.5 h-2.5 rounded-full bg-purple-500"></span>
@@ -418,7 +418,7 @@
         </div>
     </footer>
 
-    <!-- 全機能稼働用スクリキスト -->
+    <!-- 全機能稼働用スクリプト -->
     <script>
         // Lucideアイコンの初期化
         lucide.createIcons();
@@ -431,8 +431,11 @@
         });
 
         // ----------------------------------------------------
-        // 投票システム（LocalStorageにより即時稼働）
+        // 投票システム（オープンKey-Value APIによるグローバル共有）
         // ----------------------------------------------------
+        
+        // sudeshoさん専用の超高解像度・一意のパブリックバケットパス
+        const DB_URL = "https://kvdb.io/OogiriMadLab_sudesho_v3/votes";
         let votesData = {};
         let doughnutChartInstance = null;
         let barChartInstance = null;
@@ -449,38 +452,107 @@
             "りと度", "600番台", "実験体"
         ];
 
-        // 投票データの初期化（以前のローカルデータを完全に引き継ぎます）
-        function initVotes() {
+        // 投票データの初期化・グローバル同期の確立
+        async function initVotes() {
+            // 一番最初にローカルストレージから暫定ロード（超高速表示のため）
+            loadFromLocalStorage();
+            renderPlayerGrid();
+            updateCharts();
+
+            // サーバーから最新の全員の共有投票結果を取得
+            await syncWithGlobalDB();
+        }
+
+        // 共有データベースからの同期処理
+        async function syncWithGlobalDB() {
+            try {
+                const response = await fetch(DB_URL);
+                if (response.ok) {
+                    const globalData = await response.json();
+                    
+                    // サーバーから取得したデータで差分をマージ（常に値の大きい方を採用し破損を防ぐ）
+                    players.forEach(p => {
+                        votesData[p] = Math.max(votesData[p] || 0, globalData[p] || 0);
+                    });
+                    
+                    saveToLocalStorage();
+                    renderPlayerGrid();
+                    updateCharts();
+                } else if (response.status === 404) {
+                    // データベースにまだファイルがない場合は初期構造を生成してアップロード
+                    await uploadData(votesData);
+                }
+            } catch (error) {
+                console.warn("Global DB sync is offline. Operating in local mode:", error);
+            }
+        }
+
+        // データベースに直接上書き
+        async function uploadData(data) {
+            try {
+                await fetch(DB_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+            } catch (e) {
+                console.error("Failed to push to global DB:", e);
+            }
+        }
+
+        function loadFromLocalStorage() {
             const savedVotes = localStorage.getItem('ogiri_madlab_votes_v2');
             if (savedVotes) {
                 votesData = JSON.parse(savedVotes);
-                players.forEach(p => {
-                    if (votesData[p] === undefined) {
-                        votesData[p] = 0;
-                    }
-                });
-            } else {
-                players.forEach(p => {
-                    votesData[p] = 0;
-                });
-                saveVotes();
             }
-            renderPlayerGrid();
-            updateCharts();
+            // 不足しているプレイヤーを0票で初期構築
+            players.forEach(p => {
+                if (votesData[p] === undefined) {
+                    votesData[p] = 0;
+                }
+            });
         }
 
-        function saveVotes() {
+        function saveToLocalStorage() {
             localStorage.setItem('ogiri_madlab_votes_v2', JSON.stringify(votesData));
         }
 
-        // 投票アクション
-        window.voteForPlayer = function(playerName) {
+        // 投票アクション（瞬時にローカルに反映し、バックグラウンドでクラウドへ同期）
+        window.voteForPlayer = async function(playerName) {
+            // 1. まずローカルの画面を即時に「+1」増やす（サクサク感を維持）
             votesData[playerName] = (votesData[playerName] || 0) + 1;
-            saveVotes();
+            saveToLocalStorage();
             renderPlayerGrid();
             updateCharts();
-            showToast(`「${playerName}」に予想投票を行いました！`);
+            showToast(`「${playerName}」に生存予想を投票しました！(データベース同期中)`);
+
+            // 2. クラウド側の他の人の票も巻き込んでマージ＆送信
+            try {
+                const response = await fetch(DB_URL);
+                let currentGlobal = {};
+                if (response.ok) {
+                    currentGlobal = await response.json();
+                }
+
+                // クラウド側の数値をベースに自分の最新票「+1」を乗せて再アップロード
+                players.forEach(p => {
+                    votesData[p] = Math.max(votesData[p] || 0, currentGlobal[p] || 0);
+                });
+                votesData[playerName] = (currentGlobal[playerName] || 0) + 1;
+
+                await uploadData(votesData);
+                saveToLocalStorage();
+                renderPlayerGrid();
+                updateCharts();
+            } catch (error) {
+                console.warn("Unable to sync vote with server, saved locally:", error);
+            }
         };
+
+        // バックグラウンドで定期的に全員の投票数を同期（15秒に1回自動受信）
+        setInterval(async () => {
+            await syncWithGlobalDB();
+        }, 15000);
 
         // UIフィードバックトースト通知
         function showToast(message) {
@@ -777,4 +849,3 @@
 </body>
 </html>
 
-```
