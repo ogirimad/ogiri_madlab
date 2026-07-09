@@ -436,12 +436,12 @@
         // 【追加設定エリア】ここにFirebaseの設定情報を貼り付けてください！
         // ====================================================
         const MY_FIREBASE_CONFIG = {
-            apiKey: "AIzaSyAwunaJ3Qbn_cuLaiSnMDJHmzlmd-9PIiI",
-  　　　　　　authDomain: "ogiri-madlab.firebaseapp.com",
-  　　　　　　projectId: "ogiri-madlab",
-  　　　　　　storageBucket: "ogiri-madlab.firebasestorage.app",
-  　　　　　　messagingSenderId: "120257874909",
-  　　　　　　appId: "1:120257874909:web:c0df1c8857b08712da4434"
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_AUTH_DOMAIN",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_STORAGE_BUCKET",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
         };
         // ====================================================
 
@@ -469,12 +469,19 @@
             "ボチョムキン", "POPOJI", "みこ", "uq", "ランダム", "りと度", "実験体"
         ];
 
-        // 1. 三本線メニュー開閉とアイコンの初期化
+        // 1. 三本線メニュー開閉とアイコンの初期化（モバイルリンククリック時にメニューを閉じるイベントも確実にバインド）
         lucide.createIcons();
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const mobileMenu = document.getElementById('mobileMenu');
         mobileMenuBtn.addEventListener('click', () => {
             mobileMenu.classList.toggle('hidden');
+        });
+
+        // モバイルナビメニュー内のリンクをタップした時に自動で閉じる
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
         });
 
         // 2. 淘汰vol.1生存者リストの動的レンダリング（試合発生マーク付き）
