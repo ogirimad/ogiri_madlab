@@ -151,7 +151,7 @@
                         <i data-lucide="shield" class="w-5 h-5 text-emerald-400"></i>
                         <h3 class="text-xl font-bold text-white tracking-wide">淘汰vol.1生存者リスト</h3>
                     </div>
-                    <span class="text-xs font-mono text-slate-400 uppercase">生存者: <span id="survivor-count">33</span> 名</span>
+                    <span class="text-xs font-mono text-slate-400 uppercase">生存者: <span id="survivor-count">32</span> 名</span>
                 </div>
                 
                 <div class="relative mb-6">
@@ -230,9 +230,9 @@
                 </div>
                 <div class="w-full md:w-1/2 pl-12 md:pl-0 md:pr-12 md:text-right">
                     <div class="glassmorphism p-6 rounded-2xl border-slate-800 hover:border-emerald-500/30 transition-all inline-block md:max-w-md text-left">
-                        <span class="font-mono text-xs text-emerald-400">未定</span>
-                        <h3 class="text-lg font-bold text-white mt-1">未定</h3>
-                        <p class="text-slate-400 text-sm mt-2">未定</p>
+                        <span class="font-mono text-xs text-emerald-400">NEXT EVENT</span>
+                        <h3 class="text-lg font-bold text-white mt-1">アノマリー</h3>
+                        <p class="text-slate-400 text-sm mt-2">ここでしか見られない異常なお題が出現</p>
                     </div>
                 </div>
                 <div class="hidden md:block w-1/2"></div>
@@ -358,7 +358,7 @@
         const GAS_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzvDTHEZq_7usu5JktVzXvp8DZTZHyGW3hlrb_zo292sQIxM9RMlubYzHiVPEBtpytp/exec";
         // ====================================================
 
-        // 全生存者33名
+        // 全生存者32名（ランダムを削除）
         const players = [
             "安藤龍", "絵描き歌", "お城", "オホ", "kak",
             "神谷テクニカ", "クルペッコの手羽元", "さいぞう", "sAwArA", "三十六度倶楽部",
@@ -366,16 +366,16 @@
             "すずみん", "すぽんじ", "即興曲", "とらぼーい",
             "夏日", "煮込みVUITTON", "ねこねずみ", "は？",
             "ピンクジャム", "ふりある", "ほにほに",
-            "POPOJI", "ボンバーウィーメン", "みこ", "ランダム",
+            "POPOJI", "ボンバーウィーメン", "みこ", 
             "りと度", "600番台", "実験体"
         ];
 
-        // 試合発生プレイヤー指定（20名）
+        // 試合発生プレイヤー指定（18名：神谷テクニカとランダムを削除）
         const matchPlayers = [
-            "安藤龍", "オホ", "神谷テクニカ", "sAwArA", "実験体", "シャンプー剤",
+            "安藤龍", "オホ", "sAwArA", "実験体", "シャンプー剤",
             "ジュルジュル温泉!!", "すずみん", "すぽんじ", "即興曲", "とらぼーい",
             "ねこねずみ", "は？", "ピンクジャム", "ふりある", "ほにほに",
-            "みこ", "ランダム", "りと度", "600番台"
+            "みこ", "りと度", "600番台"
         ];
 
         // アイコン初期化
@@ -582,3 +582,5 @@
     </script>
 </body>
 </html>
+
+
