@@ -143,29 +143,6 @@
             </div>
         </div>
 
-        <!-- 淘汰vol.1生存者リストエリア -->
-        <div class="w-full max-w-4xl mx-auto px-4 relative z-20 mt-8 mb-16 space-y-8">
-            <div id="survivals-section" class="glassmorphism border border-labBorder rounded-3xl p-6 md:p-8 shadow-2xl relative overflow-hidden">
-                <div class="flex items-center justify-between border-b border-slate-800 pb-4 mb-6">
-                    <div class="flex items-center gap-2">
-                        <i data-lucide="shield" class="w-5 h-5 text-emerald-400"></i>
-                        <h3 class="text-xl font-bold text-white tracking-wide">淘汰vol.1生存者リスト</h3>
-                    </div>
-                    <span class="text-xs font-mono text-slate-400 uppercase">生存者: <span id="survivor-count">32</span> 名</span>
-                </div>
-                
-                <div class="relative mb-6">
-                    <i data-lucide="search" class="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-500"></i>
-                    <input id="survivor-search" type="text" placeholder="生存者を検索..." class="w-full pl-9 pr-4 py-2 bg-slate-950/50 border border-slate-800 rounded-lg text-xs text-slate-200 focus:outline-none focus:border-emerald-500 transition-colors">
-                </div>
-
-                <!-- 生存者グリッド -->
-                <div id="survivals-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2.5 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
-                    <!-- JSにて動的構築 -->
-                </div>
-            </div>
-        </div>
-
         <!-- 下方向スクロール案内 -->
         <div class="mt-4 text-center animate-bounce">
             <span class="block text-xs font-mono text-slate-500 tracking-widest uppercase mb-1">Scroll Down</span>
@@ -358,26 +335,6 @@
         const GAS_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzvDTHEZq_7usu5JktVzXvp8DZTZHyGW3hlrb_zo292sQIxM9RMlubYzHiVPEBtpytp/exec";
         // ====================================================
 
-        // 全生存者32名（ランダムを削除）
-        const players = [
-            "安藤龍", "絵描き歌", "お城", "オホ", "kak",
-            "神谷テクニカ", "クルペッコの手羽元", "さいぞう", "sAwArA", "三十六度倶楽部",
-            "さんれ", "シャンプー剤", "ジュルジュル温泉!!", "贖罪", "新大",
-            "すずみん", "すぽんじ", "即興曲", "とらぼーい",
-            "夏日", "煮込みVUITTON", "ねこねずみ", "は？",
-            "ピンクジャム", "ふりある", "ほにほに",
-            "POPOJI", "ボンバーウィーメン", "みこ", 
-            "りと度", "600番台", "実験体"
-        ];
-
-        // 試合発生プレイヤー指定（18名：神谷テクニカとランダムを削除）
-        const matchPlayers = [
-            "安藤龍", "オホ", "sAwArA", "実験体", "シャンプー剤",
-            "ジュルジュル温泉!!", "すずみん", "すぽんじ", "即興曲", "とらぼーい",
-            "ねこねずみ", "は？", "ピンクジャム", "ふりある", "ほにほに",
-            "みこ", "りと度", "600番台"
-        ];
-
         // アイコン初期化
         function initIcons() {
             if (typeof lucide !== 'undefined') {
@@ -399,46 +356,6 @@
                 link.addEventListener('click', () => {
                     mobileMenu.classList.add('hidden');
                 });
-            });
-        }
-
-        // 生存者リストのレンダリング
-        function renderSurvivorsList(filterText = "") {
-            const container = document.getElementById('survivals-grid');
-            if(!container) return;
-            container.innerHTML = '';
-
-            const query = filterText.toLowerCase();
-            const filteredPlayers = players.filter(p => p.toLowerCase().includes(query));
-
-            if (filteredPlayers.length === 0) {
-                container.innerHTML = `<div class="col-span-full py-8 text-center text-slate-500 text-xs">該当するプレイヤーは見つかりませんでした。</div>`;
-                return;
-            }
-
-            filteredPlayers.forEach(name => {
-                const hasMatch = matchPlayers.includes(name);
-                const item = document.createElement('div');
-                item.className = "p-3 rounded-xl bg-slate-950/60 border border-slate-900 flex items-center justify-between text-xs font-medium text-slate-300 relative overflow-hidden hover:border-emerald-500/30 transition-colors";
-                
-                item.innerHTML = `
-                    <span class="truncate pr-1">${name}</span>
-                    ${hasMatch ? `
-                        <span class="flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold text-orange-400 bg-orange-500/10 border border-orange-500/20 flex-shrink-0 select-none animate-pulse">
-                            <span class="w-1 h-1 rounded-full bg-orange-400"></span>試合発生
-                        </span>
-                    ` : ''}
-                `;
-                container.appendChild(item);
-            });
-        }
-        renderSurvivorsList();
-
-        // 検索機能
-        const survivorSearch = document.getElementById('survivor-search');
-        if (survivorSearch) {
-            survivorSearch.addEventListener('input', (e) => {
-                renderSurvivorsList(e.target.value);
             });
         }
 
@@ -582,5 +499,3 @@
     </script>
 </body>
 </html>
-
-
